@@ -14,9 +14,12 @@ export class AppointmentListComponent implements OnInit {
   appointments: Appointment[] = []
 
   ngOnInit(): void {
-    let saveAppointments = localStorage.getItem("appointments")
+    this.loadAppointments()
+  }
 
-    this.appointments = saveAppointments ? JSON.parse(saveAppointments) : []
+  loadAppointments(){
+    let savedAppointments = localStorage.getItem("appointments")
+    this.appointments = savedAppointments ? JSON.parse(savedAppointments) : []
   }
 
   addAppointment() {
@@ -41,8 +44,9 @@ export class AppointmentListComponent implements OnInit {
       localStorage.setItem("appointments", JSON.stringify(this.appointments))
     }
   }
-  deleteAppointment(index: number) {
-    this.appointments.splice(index, 1)
-    localStorage.setItem("appointments", JSON.stringify(this.appointments))
+  deleteAppointment(id: number) {
+    var filteredAppointment = this.appointments.filter(item => item.id !== id)
+    localStorage.setItem("appointments", JSON.stringify(filteredAppointment))
+    this.loadAppointments()
   }
 }
